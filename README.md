@@ -1,4 +1,4 @@
 Kết quả khi chạy thử bằng xiaomi redmi note 13
-![ketquachay_android_1](https://github.com/user-attachments/assets/e9be2fd9-a0ae-45d2-a98f-467551fb1eeb)
+![ketquachay_android_1](https://github.com/user-attachments/assets/fba52051-a201-42a1-8f3c-2ef2e1c10215)
 
 
