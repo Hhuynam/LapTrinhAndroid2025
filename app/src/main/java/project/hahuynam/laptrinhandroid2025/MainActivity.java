@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,28 +22,33 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .baseUrl("https://57kmt.duckdns.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         ApiService apiService = retrofit.create(ApiService.class);
-        Call<List<Post>> call = apiService.getPosts();
-        call.enqueue(new Callback<List<Post>>() {
+        Call<LastId> call = apiService.getLastId();
+        call.enqueue(new Callback<LastId>() {
             @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                if (response.isSuccessful()) {
-                    List<Post> posts = response.body();
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (Post post : posts) {
-                        stringBuilder.append("Title: ").append(post.getTitle()).append("\n");
-                    }
-                    textView.setText(stringBuilder.toString());
+            public void onResponse(Call<LastId> call, Response<LastId> response) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, "Request Failed. Code: " + response.code());
+                    textView.setText("Request Failed. Code: " + response.code());
+                    return;
+                }
+
+                LastId lastId = response.body();
+                if (lastId != null) {
+                    textView.setText("Last ID: " + lastId.getLastId());
+                } else {
+                    textView.setText("No data received");
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
+            public void onFailure(Call<LastId> call, Throwable t) {
                 Log.e(TAG, "Error: " + t.getMessage());
+                textView.setText("Error: " + t.getMessage());
             }
         });
     }
